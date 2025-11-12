@@ -1,4 +1,5 @@
 import HeaderItem from "./HeaderItem";
+import DarkModeSwitch from "./DarkModeSwitch";
 import { HomeIcon, BoltIcon, UserIcon } from "@heroicons/react/24/outline";
 
 export default function Header() {
@@ -12,6 +13,7 @@ export default function Header() {
     <div className="flex justify-between items-center p-3 max-w-6xl mx-auto">
       {/* 1. Menu Items Container*/}
       <div className="flex gap-10">
+        <DarkModeSwitch />
         {menuItems.map(
           (
             item //loop through menu items array

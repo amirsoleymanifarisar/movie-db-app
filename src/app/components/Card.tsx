@@ -11,7 +11,7 @@ export default function Card({ result }: CardProps) {
 
   return (
     <Link href={`/movie/${result.id}`}>
-      <div className="cursor-pointer sm:p-3 sm:hover:shadow-slate-400 sm:shadow-md rounded-lg sm:border-slate-400 sm:m-2 transition-shadow duration-200">
+      <div className="cursor-pointer bg-white dark:bg-gray-700 sm:p-3 sm:hover:shadow-slate-400 sm:shadow-md sm:border sm:border-slate-400 dark:border-gray-600 rounded-lg sm:m-2 transition-shadow duration-200">
         {/* 1. Movie Poster Image */}
         <Image
           src={`${imageUrl}${result.backdrop_path || result.poster_path}`}
