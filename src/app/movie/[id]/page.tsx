@@ -20,7 +20,7 @@ export default async function MoviePage({
   const imageUrl = "https://image.tmdb.org/t/p/original";
 
   return (
-    <div className="w-full">
+    <div className="w-full mt-6">
       <div className="p-4 md:pt-8 flex flex-col md:flex-row items-center content-center max-w-6xl mx-auto md:space-x-6">
         {/* Poster Image */}
         <Image
@@ -38,10 +38,27 @@ export default async function MoviePage({
         />
 
         {/* Text Content */}
+        <h1 className="text-4xl font-bold mb-6 text-center md:text-left">
+          Movie Details
+        </h1>
         <div className="p-2">
-          <h2 className="text-lg mb-3 font-bold">
+          <h2 className="text-3xl mb-3 font-bold">
             {movie.title || movie.name}
           </h2>
+          <p className="text-gray-400 mb-2">
+            Release date: {movie.release_date}
+          </p>
+
+          <div className="flex flex-wrap gap-2 mb-4">
+            {movie.genres.map((genre: any) => (
+              <span
+                key={genre.id}
+                className="bg-gray-700 px-3 py-1 rounded-full text-sm"
+              >
+                {genre.name}
+              </span>
+            ))}
+          </div>
           <p className="text-lg mb-3 pt-2">{movie.overview}</p>
           <p className="mb-3">
             <span className="font-semibold mr-1">Rating</span>
