@@ -23,11 +23,18 @@ export default async function SearchPage({
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Results for: "{query}"</h1>
 
-      <div className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 max-w-6xl mx-auto py-4">
-        {results.map((result: any) => (
-          <Card key={result.id} result={result} />
-        ))}
-      </div>
+      {results.length === 0 ? (
+        <div className="text-center mt-10 text-gray-400">
+          <h2 className="text-2xl font-semibold mb-2">No results found</h2>
+          <p>Try searching for another movie.</p>
+        </div>
+      ) : (
+        <div className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 max-w-6xl mx-auto py-4">
+          {results.map((result: any) => (
+            <Card key={result.id} result={result} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
