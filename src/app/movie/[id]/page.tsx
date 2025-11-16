@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from "react";
+import Card from "@/app/components/Card";
 
 const BASE_URL = "https://api.themoviedb.org/3";
 
@@ -19,6 +20,11 @@ export default async function MoviePage({
   const movie = await res.json();
   const imageUrl = "https://image.tmdb.org/t/p/original";
 
+  const similarRes = await fetch(
+    `${BASE_URL}/movie/${movieId}/similar?api_key=${process.env.TMDB_API_KEY}&language=en-US`
+  );
+  const similarData = await similarRes.json();
+  const similarMovies = similarData.results || [];
   return (
     <div className="w-full mt-6">
       <div className="p-4 md:pt-8 flex flex-col md:flex-row items-center content-center max-w-6xl mx-auto md:space-x-6">
@@ -69,6 +75,17 @@ export default async function MoviePage({
           </p>
         </div>
       </div>
+      {/* Similar Movies Section */}
+      {similarMovies.length > 0 && (
+        <div className="mt-10">
+          <h2 className="text-2xl font-bold mb-4">Similar Movies</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {similarMovies.slice(0, 8).map((movie: any) => (
+              <Card key={movie.id} result={movie} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
