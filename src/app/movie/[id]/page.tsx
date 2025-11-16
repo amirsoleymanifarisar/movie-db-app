@@ -20,6 +20,13 @@ export default async function MoviePage({
   const movie = await res.json();
   const imageUrl = "https://image.tmdb.org/t/p/original";
 
+  //Fetch Cast
+  const creditsRes = await fetch(
+    `${BASE_URL}/movie/${movieId}/credits?api_key=${process.env.TMDB_API_KEY}&language=en-US`
+  );
+  const creditsData = await creditsRes.json();
+  const cast = creditsData.cast || [];
+
   // Fetch trailer video
   const videoRes = await fetch(
     `${BASE_URL}/movie/${movieId}/videos?api_key=${process.env.TMDB_API_KEY}&language=en-US`
@@ -85,6 +92,40 @@ export default async function MoviePage({
           </p>
         </div>
       </div>
+
+      {/* Cast Section */}
+      {cast.length > 0 && (
+        <div className="mt-10 max-w-6xl mx-auto">
+          <h2 className="text-2xl font-bold mb-4">Cast</h2>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            {cast.slice(0, 10).map((actor: any) => (
+              <div
+                key={actor.cast_id}
+                className="bg-gray-800 rounded-lg p-3 flex flex-col items-center:"
+              >
+                <div className="w-32 h-32 relative bg-black rounded-full overflow-hidden">
+                  {actor.profile_path ? (
+                    <Image
+                      src={`https://image.tmdb.org/t/p/w300${actor.profile_path}`}
+                      alt={actor.name}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <span className="text-sm text-gray-400">No Image</span>
+                  )}
+                </div>
+
+                <p className="mt-3 font-semibold text-center"> {actor.name}</p>
+                <p className="text-sm text-gray-400 text-center">
+                  as {actor.character}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       {/* Trailer Section */}
       {trailer && (
         <div className="mt-10 max-w-4xl mx-auto">
