@@ -77,7 +77,7 @@ export default async function MoviePage({
       </div>
       {/* Similar Movies Section */}
       {similarMovies.length > 0 && (
-        <div className="mt-10">
+        <div className="mt-10 max-w-6xl mx-auto">
           <h2 className="text-2xl font-bold mb-4">Similar Movies</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {similarMovies.slice(0, 8).map((movie: any) => (

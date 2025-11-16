@@ -13,17 +13,14 @@ export default function Card({ result }: CardProps) {
     <Link href={`/movie/${result.id}`}>
       <div className="cursor-pointer bg-white dark:bg-gray-700 sm:p-3 sm:hover:shadow-slate-400 sm:shadow-md sm:border sm:border-slate-400 dark:border-gray-600 rounded-lg sm:m-2 transition-shadow duration-200">
         {/* 1. Movie Poster Image */}
-        <Image
-          src={`${imageUrl}${result.backdrop_path || result.poster_path}`}
-          width={500}
-          height={300}
-          style={{
-            maxWidth: "100%",
-            height: "auto",
-          }}
-          alt="movie poster"
-          className="sm:rounded-t-lg group-hover:opacity-80 transition-opacity duration-300"
-        />
+        <div className="w-full h-48 relative bg-black">
+          <Image
+            src={`${imageUrl}${result.backdrop_path ?? result.poster_path}`}
+            alt="movie poster"
+            fill
+            className="object-contain rounded-t-lg"
+          />
+        </div>
 
         {/* 2. Text Content */}
         <div className="p-2">
