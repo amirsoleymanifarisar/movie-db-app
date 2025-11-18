@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Card from "./Card";
 
 export default function MovieList({ genre }: { genre: string }) {
@@ -8,47 +9,57 @@ export default function MovieList({ genre }: { genre: string }) {
   const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const searchParams = useSearchParams();
+  const year = searchParams.get("year") || "";
+  const rating = searchParams.get("rating") || "";
+
   async function loadMovies(pageNumber: number) {
     setLoading(true);
 
-    console.log("Loading page:", pageNumber);
-
     const BASE_URL = "https://api.themoviedb.org/3";
-    const genrePath =
-      genre === "topRated" ? "/movie/top_rated" : "/trending/all/week";
+    const genrePath = "/discover/movie";
 
-    const res = await fetch(
-      `${BASE_URL}${genrePath}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US&page=${pageNumber}`
-    );
+    const sortBy =
+      genre === "topRated" ? "vote_average.desc" : "popularity.desc";
 
+    const params = new URLSearchParams({
+      api_key: process.env.NEXT_PUBLIC_TMDB_API_KEY!,
+      language: "en-US",
+      page: pageNumber.toString(),
+      sort_by: sortBy,
+    });
+
+    if (genre === "topRated") params.set("vote_count.gte", "500");
+    if (year) params.set("primary_release_year", year);
+    if (rating && rating !== "0") params.set("vote_average.gte", rating);
+
+    const res = await fetch(`${BASE_URL}${genrePath}?${params.toString()}`);
     const data = await res.json();
 
-    console.log("Received results:", data.results);
-
-    // to Append and not to Replace
-    setResults((prev) => [...prev, ...data.results]);
+    setResults((prev) => [...prev, ...(data.results || [])]);
     setLoading(false);
   }
 
   useEffect(() => {
+    setResults([]);
+    setPage(1);
     loadMovies(1);
-  }, [genre]);
+  }, [genre, year, rating]);
+
   function handleLoadMore() {
-    const newPage = page + 1;
-    setPage(newPage);
-    loadMovies(newPage);
+    const next = page + 1;
+    setPage(next);
+    loadMovies(next);
   }
 
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Movie Grid*/}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
         {results.map((movie) => (
           <Card key={movie.id} result={movie} />
         ))}
       </div>
 
-      {/* Load More */}
       <div className="flex justify-center my-8">
         <button
           onClick={handleLoadMore}

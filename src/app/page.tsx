@@ -1,5 +1,6 @@
 // src/app/page.tsx
 import MovieList from "./components/MovieList";
+import FilterBar from "./components/FilterBar";
 
 export default async function Home({
   searchParams,
@@ -13,6 +14,8 @@ export default async function Home({
       <h1 className="text-2xl font-bold mb-4">
         {genre === "topRated" ? "Top Rated Movies" : "Trending This Week"}
       </h1>
+
+      <FilterBar />
 
       <MovieList genre={genre} />
     </div>
