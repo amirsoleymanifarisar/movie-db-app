@@ -1,62 +1,53 @@
 "use client";
-import { useSearchParams, useRouter } from "next/navigation";
-import { useState } from "react";
 
 export default function FilterBar() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const [year, setYear] = useState(searchParams.get("year") || "");
-  const [rating, setRating] = useState(searchParams.get("rating") || "0");
-
-  function applyFilters() {
-    const params = new URLSearchParams(searchParams.toString());
-
-    if (year) params.set("year", year);
-    else params.delete("year");
-
-    if (rating) params.set("rating", rating);
-    else params.delete("rating");
-
-    router.push("?" + params.toString());
-  }
-
   return (
-    <div className="flex flex-wrap gap-4 items-end bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mb-6">
-      {/* YEAR */}
-      <div className="flex flex-col">
-        <label className="text-sm mb-1">Release Year</label>
-        <input
-          type="number"
-          placeholder="e.g. 2020"
-          value={year}
-          onChange={(e) => setYear(e.target.value)}
-          className="p-2 rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600"
-        />
-      </div>
+    <div className="mt-10 w-full max-w-5xl mx-auto bg-gray-900/60 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-lg">
+      <h2 className="text-3xl font-bold mb-8 text-white">Top Rated Movies</h2>
 
-      {/* RATING */}
-      <div className="flex flex-col">
-        <label className="text-sm mb-1">Min Rating</label>
-        <select
-          value={rating}
-          onChange={(e) => setRating(e.target.value)}
-          className="p-2 rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600"
-        >
-          {[0, 5, 6, 7, 8].map((r) => (
-            <option key={r} value={r}>
-              {r}+
-            </option>
-          ))}
-        </select>
-      </div>
+      <form className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        {/* Release year */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium text-gray-300 mb-2">
+            Release Year
+          </label>
+          <input
+            type="number"
+            name="year"
+            placeholder="e.g. 2020"
+            className="px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-gray-100 placeholder-gray-500
+                     focus:outline-none focus:ring-2 focus:ring-amber-500"
+          />
+        </div>
 
-      <button
-        onClick={applyFilters}
-        className="px-4 py-2 bg-amber-500 text-white rounded hover:bg-amber-600"
-      >
-        Apply
-      </button>
+        {/* Rating */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium text-gray-300 mb-2">
+            Min Rating
+          </label>
+          <select
+            name="rating"
+            className="px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-gray-100
+                     focus:outline-none focus:ring-2 focus:ring-amber-500"
+          >
+            {[0, 2, 4, 6, 8].map((r) => (
+              <option key={r} value={r}>
+                {r}+
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Button */}
+        <div className="flex items-end">
+          <button
+            type="submit"
+            className="w-full sm:w-auto px-8 py-3 bg-amber-600 hover:bg-amber-500 transition-colors rounded-xl font-semibold text-white shadow-md"
+          >
+            Apply
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
