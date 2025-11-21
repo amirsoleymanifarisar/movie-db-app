@@ -2,7 +2,7 @@
 
 export default function FilterBar() {
   return (
-    <div className="mt-10 w-full max-w-5xl mx-auto bg-gray-900/60 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-lg">
+    <div className="mt-10 w-full max-w-5xl mx-auto bg-gray-900/60 dark:bg-night-900/60 backdrop-blur-lg border border-gray-700 dark:border-night-600 rounded-2xl p-8 shadow-lg">
       <h2 className="text-3xl font-bold mb-8 text-white">Top Rated Movies</h2>
 
       <form className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -15,7 +15,7 @@ export default function FilterBar() {
             type="number"
             name="year"
             placeholder="e.g. 2020"
-            className="px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-gray-100 placeholder-gray-500
+            className="px-4 py-3 rounded-xl bg-gray-800 dark:bg-night-800 border border-gray-700 dark:border-night-600 text-gray-100 placeholder-gray-500
                      focus:outline-none focus:ring-2 focus:ring-amber-500"
           />
         </div>
@@ -27,7 +27,7 @@ export default function FilterBar() {
           </label>
           <select
             name="rating"
-            className="px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-gray-100
+            className="px-4 py-3 rounded-xl bg-gray-800 dark:bg-night-800 border border-gray-700 dark:border-night-600 text-gray-100
                      focus:outline-none focus:ring-2 focus:ring-amber-500"
           >
             {[0, 2, 4, 6, 8].map((r) => (

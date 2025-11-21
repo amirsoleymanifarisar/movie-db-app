@@ -4,6 +4,10 @@
 
 @layer base {
   body {
-    @apply bg-white dark:bg-gray-800 text-black dark:text-gray-200 min-h-screen;
+    @apply bg-white dark:bg-night-900 text-black dark:text-gray-200 min-h-screen;
   }
+}
+html.dark {
+  color-scheme: dark;
+  background-color: #121212;
 }
