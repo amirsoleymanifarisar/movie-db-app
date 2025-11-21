@@ -1,4 +1,5 @@
 "use client";
+
 import HeaderItem from "./HeaderItem";
 import DarkModeSwitch from "./DarkModeSwitch";
 import { HomeIcon, BoltIcon, UserIcon } from "@heroicons/react/24/outline";
@@ -9,62 +10,97 @@ export default function Header() {
 
   const menuItems = [
     { title: "HOME", Icon: HomeIcon, param: "trending" },
-    { title: "TOP RATED", Icon: BoltIcon, param: "topRated", cName: "mt-1" },
-  ]; // ⬅️ removed ACCOUNT from here
+    { title: "TOP RATED", Icon: BoltIcon, param: "topRated" },
+  ];
 
   return (
-    <div className="flex justify-between items-center h-16 max-w-6xl mx-auto pt-5">
-      {/* LEFT: MENU ITEMS */}
-      <div className="flex gap-10 items-center">
-        {menuItems.map((item) => (
-          <HeaderItem
-            key={item.param}
-            title={item.title}
-            Icon={item.Icon}
-            param={item.param}
-            cName={item.cName}
-          />
-        ))}
-      </div>
+    <header className="bg-[#0b0b10] border-b border-[#2a2a2d] sticky top-0 z-50">
+      <div className="max-w-6xl mx-auto flex items-center justify-between py-4 px-4">
+        {/* LEFT: navigation */}
+        <nav className="flex items-center gap-8">
+          {menuItems.map((item) => (
+            <HeaderItem
+              key={item.param}
+              title={item.title}
+              Icon={item.Icon}
+              param={item.param}
+            />
+          ))}
+        </nav>
 
-      {/* RIGHT: SEARCH, LOGO, LOGIN/LOGOUT */}
-      <div className="flex gap-4 items-center">
-        {/* Dark mode */}
-        <div className="flex flex-col items-center group cursor-pointer w-12 sm:w-20 hover:text-white">
-          <DarkModeSwitch />
+        {/* RIGHT: controls */}
+        <div className="flex items-center gap-4">
+          {/* Dark mode */}
+          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#14141a] hover:bg-[#1f1f27] transition-colors cursor-pointer">
+            <DarkModeSwitch />
+          </div>
+
+          {/* Search */}
+          <form action="/search" className="hidden sm:block">
+            <input
+              name="query"
+              placeholder="Search..."
+              className="
+                px-3 py-1.5 w-40 sm:w-56
+                rounded-full
+                bg-[#14141a]
+                border border-[#2a2a2d]
+                text-sm text-gray-100
+                placeholder-gray-500
+                focus:outline-none focus:ring-2 focus:ring-[#F5C518] focus:border-transparent
+              "
+              autoComplete="off"
+            />
+          </form>
+
+          {/* Logo */}
+          <div className="flex items-center gap-2">
+            <span
+              className="
+                text-xl font-extrabold
+                bg-[#F5C518] text-black
+                px-3 py-1 rounded-lg
+                shadow-md shadow-black/40
+              "
+            >
+              IMDb
+            </span>
+            <span className="text-sm sm:text-base text-gray-200">Clone</span>
+          </div>
+
+          {/* User: login / avatar */}
+          {session ? (
+            <img
+              src={session.user?.image || ""}
+              alt="user"
+              className="
+                w-9 h-9 rounded-full
+                border border-[#2a2a2d]
+                cursor-pointer
+                hover:opacity-80
+                transition
+              "
+              onClick={() => signOut()}
+            />
+          ) : (
+            <button
+              type="button"
+              className="
+                flex items-center justify-center
+                w-9 h-9
+                rounded-full
+                border border-[#2a2a2d]
+                text-gray-200
+                hover:text-[#F5C518] hover:border-[#F5C518]
+                transition
+              "
+              onClick={() => signIn("google")}
+            >
+              <UserIcon className="h-5 w-5" />
+            </button>
+          )}
         </div>
-
-        {/* Search bar */}
-        <form action="/search">
-          <input
-            name="query"
-            placeholder="Search..."
-            className="px-3 py-1 w-32 sm:w-48 rounded-md text-black"
-            autoComplete="off"
-          />
-        </form>
-
-        {/* Logo */}
-        <span className="text-2xl font-bold bg-amber-500 p-1 rounded-lg">
-          IMDb
-        </span>
-        <span className="text-xl hidden sm:inline">Clone</span>
-
-        {/* LOGIN / LOGOUT */}
-        {session ? (
-          <img
-            src={session.user?.image || ""}
-            alt="user"
-            className="w-10 h-10 rounded-full cursor-pointer hover:opacity-80"
-            onClick={() => signOut()}
-          />
-        ) : (
-          <UserIcon
-            className="h-8 cursor-pointer hover:text-amber-500"
-            onClick={() => signIn("google")}
-          />
-        )}
       </div>
-    </div>
+    </header>
   );
 }

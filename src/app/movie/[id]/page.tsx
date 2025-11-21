@@ -1,8 +1,8 @@
 import Image from "next/image";
-import React from "react";
 import Card from "@/app/components/Card";
 
 const BASE_URL = "https://api.themoviedb.org/3";
+const IMAGE_BASE = "https://image.tmdb.org/t/p/original";
 
 export default async function MoviePage({
   params,
@@ -10,101 +10,121 @@ export default async function MoviePage({
   params: { id: string };
 }) {
   const movieId = params.id;
-  const url = `${BASE_URL}/movie/${movieId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`;
-  const res = await fetch(url, { next: { revalidate: 10000 } });
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch movie details");
-  }
+  // Movie details
+  const movieRes = await fetch(
+    `${BASE_URL}/movie/${movieId}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`,
+    { next: { revalidate: 10000 } }
+  );
+  if (!movieRes.ok) throw new Error("Failed to fetch movie details");
+  const movie = await movieRes.json();
 
-  const movie = await res.json();
-  const imageUrl = "https://image.tmdb.org/t/p/original";
-
-  //Fetch Cast
+  // Cast
   const creditsRes = await fetch(
-    `${BASE_URL}/movie/${movieId}/credits?api_key=${process.env.TMDB_API_KEY}&language=en-US`
+    `${BASE_URL}/movie/${movieId}/credits?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
   );
   const creditsData = await creditsRes.json();
   const cast = creditsData.cast || [];
 
-  // Fetch trailer video
+  // Videos (trailer)
   const videoRes = await fetch(
-    `${BASE_URL}/movie/${movieId}/videos?api_key=${process.env.TMDB_API_KEY}&language=en-US`
+    `${BASE_URL}/movie/${movieId}/videos?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
   );
   const videoData = await videoRes.json();
-
   const trailer = videoData.results?.find(
     (vid: any) => vid.type === "Trailer" && vid.site === "YouTube"
   );
 
+  // Similar movies
   const similarRes = await fetch(
-    `${BASE_URL}/movie/${movieId}/similar?api_key=${process.env.TMDB_API_KEY}&language=en-US`
+    `${BASE_URL}/movie/${movieId}/similar?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
   );
   const similarData = await similarRes.json();
   const similarMovies = similarData.results || [];
+
   return (
-    <div className="w-full mt-6">
-      <div className="p-4 md:pt-8 flex flex-col md:flex-row items-center content-center max-w-6xl mx-auto md:space-x-6">
-        {/* Poster Image */}
-        <Image
-          src={`${imageUrl}${movie.backdrop_path || movie.poster_path}`}
-          width={500}
-          height={300}
-          alt="Movie Poster"
-          className="rounded-lg"
-          style={{
-            maxWidth: "100%",
-            height: "100%",
-          }}
-          placeholder="blur"
-          blurDataURL="/spinner.svg"
-        />
-
-        {/* Text Content */}
-        <h1 className="text-4xl font-bold mb-6 text-center md:text-left">
-          Movie Details
-        </h1>
-        <div className="p-2">
-          <h2 className="text-3xl mb-3 font-bold">
-            {movie.title || movie.name}
-          </h2>
-          <p className="text-gray-400 mb-2">
-            Release date: {movie.release_date}
-          </p>
-
-          <div className="flex flex-wrap gap-2 mb-4">
-            {movie.genres.map((genre: any) => (
-              <span
-                key={genre.id}
-                className="px-3 py-1 rounded-full text-sm bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
-              >
-                {genre.name}
-              </span>
-            ))}
+    <div className="w-full min-h-screen bg-[#050509] text-gray-100 pb-16">
+      {/* HERO SECTION */}
+      <section className="relative max-w-6xl mx-auto mt-6 px-4">
+        {/* Background blur image */}
+        {movie.backdrop_path && (
+          <div className="absolute inset-0 -z-10 opacity-30 blur-3xl">
+            <Image
+              src={`${IMAGE_BASE}${movie.backdrop_path}`}
+              alt={movie.title || "Background"}
+              fill
+              className="object-cover"
+            />
           </div>
-          <p className="text-lg mb-3 pt-2">{movie.overview}</p>
-          <p className="mb-3">
-            <span className="font-semibold mr-1">Rating</span>
-            {movie.vote_count} Votes
-            <span className="ml-2 text-amber-500">
-              ({movie.vote_average.toFixed(1)}/10)
-            </span>
-          </p>
+        )}
+
+        <div className="flex flex-col md:flex-row gap-8 bg-[#0b0b10]/90 rounded-2xl p-5 md:p-8 border border-[#2a2a2d] shadow-xl shadow-black/40">
+          {/* Poster */}
+          <div className="relative w-full md:w-1/3 max-w-xs mx-auto md:mx-0 aspect-[2/3] overflow-hidden rounded-2xl border border-[#2a2a2d] bg-black">
+            <Image
+              src={`${IMAGE_BASE}${movie.poster_path || movie.backdrop_path}`}
+              alt={movie.title || "Movie poster"}
+              fill
+              className="object-cover"
+            />
+          </div>
+
+          {/* Text content */}
+          <div className="flex-1 flex flex-col justify-between">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold mb-2">
+                {movie.title || movie.name}
+              </h1>
+
+              <p className="text-sm text-gray-400 mb-4">
+                {movie.release_date} • {movie.runtime} min
+              </p>
+
+              {/* Genres */}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {movie.genres?.map((genre: any) => (
+                  <span
+                    key={genre.id}
+                    className="px-3 py-1 rounded-full text-xs bg-[#1a1a1d] border border-[#2a2a2d] text-gray-200"
+                  >
+                    {genre.name}
+                  </span>
+                ))}
+              </div>
+
+              {/* Overview */}
+              <p className="text-sm md:text-base text-gray-200 leading-relaxed mb-4">
+                {movie.overview}
+              </p>
+            </div>
+
+            {/* Rating */}
+            <div className="mt-4 flex items-center gap-3">
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#14141a] border border-[#2a2a2d] px-4 py-1.5">
+                <span className="text-sm text-gray-300">Rating</span>
+                <span className="text-lg font-bold text-[#F5C518]">
+                  {movie.vote_average?.toFixed(1)}/10
+                </span>
+              </div>
+              <p className="text-xs text-gray-400">
+                {movie.vote_count} votes on TMDB
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Cast Section */}
+      {/* CAST SECTION */}
       {cast.length > 0 && (
-        <div className="mt-10 max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Cast</h2>
-
+        <section className="mt-10 max-w-6xl mx-auto px-4">
+          <h2 className="text-2xl font-semibold mb-4">Cast</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {cast.slice(0, 10).map((actor: any) => (
               <div
                 key={actor.cast_id}
-                className="bg-gray-100:0 dark:bg-gray-800 rounded-lg p-3 flex flex-col items-center:"
+                className="bg-[#0b0b10] border border-[#2a2a2d] rounded-xl p-3 flex flex-col items-center shadow-md shadow-black/40"
               >
-                <div className="w-32 h-32 relative bg-black rounded-full overflow-hidden">
+                <div className="w-24 h-24 relative bg-black rounded-full overflow-hidden">
                   {actor.profile_path ? (
                     <Image
                       src={`https://image.tmdb.org/t/p/w300${actor.profile_path}`}
@@ -113,50 +133,52 @@ export default async function MoviePage({
                       className="object-cover"
                     />
                   ) : (
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
                       No Image
                     </span>
                   )}
                 </div>
 
-                <p className="mt-3 font-semibold text-center text-gray-900 dark:text-white">
-                  {" "}
+                <p className="mt-3 font-semibold text-center text-gray-100 text-sm">
                   {actor.name}
                 </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
+                <p className="text-xs text-gray-400 text-center">
                   as {actor.character}
                 </p>
               </div>
             ))}
           </div>
-        </div>
+        </section>
       )}
-      {/* Trailer Section */}
-      {trailer && (
-        <div className="mt-10 max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Trailer</h2>
 
-          <div className="aspect-video w-full">
-            <iframe
-              src={`https://www.youtube.com/embed/${trailer.key}`}
-              title="Movie Trailer"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full rounded-lg"
-            ></iframe>
+      {/* TRAILER SECTION */}
+      {trailer && (
+        <section className="mt-10 max-w-4xl mx-auto px-4">
+          <h2 className="text-2xl font-semibold mb-4">Trailer</h2>
+          <div className="rounded-2xl overflow-hidden border border-[#2a2a2d] shadow-xl shadow-black/60 bg-black">
+            <div className="aspect-video w-full">
+              <iframe
+                src={`https://www.youtube.com/embed/${trailer.key}`}
+                title="Movie Trailer"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+              />
+            </div>
           </div>
-        </div>
+        </section>
       )}
-      {/* Similar Movies Section */}
+
+      {/* SIMILAR MOVIES SECTION */}
       {similarMovies.length > 0 && (
-        <div className="mt-10 max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Similar Movies</h2>
+        <section className="mt-12 max-w-6xl mx-auto px-4">
+          <h2 className="text-2xl font-semibold mb-4">Similar Movies</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {similarMovies.slice(0, 8).map((movie: any) => (
-              <Card key={movie.id} result={movie} />
+            {similarMovies.slice(0, 8).map((m: any) => (
+              <Card key={m.id} result={m} />
             ))}
           </div>
-        </div>
+        </section>
       )}
     </div>
   );
