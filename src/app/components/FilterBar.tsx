@@ -3,7 +3,9 @@
 export default function FilterBar() {
   return (
     <div className="mt-10 w-full max-w-5xl mx-auto bg-white/90 dark:bg-night-900/60 backdrop-blur-lg border border-gray-200 dark:border-night-600 rounded-2xl p-8 shadow-md">
-      <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Top Rated Movies</h2>
+      <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">
+        Top Rated Movies
+      </h2>
 
       <form className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         {/* Release year */}

@@ -43,7 +43,7 @@ export default async function MoviePage({
   const similarMovies = similarData.results || [];
 
   return (
-    <div className="w-full min-h-screen bg-[#050509] text-gray-100 pb-16">
+    <div className="w-full min-h-screen bg-white dark:bg-night-900 text-gray-900 dark:text-gray-100 pb-16">
       {/* HERO SECTION */}
       <section className="relative max-w-6xl mx-auto mt-6 px-4">
         {/* Background blur image */}
@@ -58,9 +58,9 @@ export default async function MoviePage({
           </div>
         )}
 
-        <div className="flex flex-col md:flex-row gap-8 bg-[#0b0b10]/90 rounded-2xl p-5 md:p-8 border border-[#2a2a2d] shadow-xl shadow-black/40">
+        <div className="flex flex-col md:flex-row gap-8 bg-white/90 dark:bg-night-900/60 rounded-2xl p-5 md:p-8 border border-gray-200 dark:border-night-600 shadow-xl shadow-black/10">
           {/* Poster */}
-          <div className="relative w-full md:w-1/3 max-w-xs mx-auto md:mx-0 aspect-[2/3] overflow-hidden rounded-2xl border border-[#2a2a2d] bg-black">
+          <div className="relative w-full md:w-1/3 max-w-xs mx-auto md:mx-0 aspect-[2/3] overflow-hidden rounded-2xl border border-gray-200 dark:border-night-600 bg-white dark:bg-black">
             <Image
               src={`${IMAGE_BASE}${movie.poster_path || movie.backdrop_path}`}
               alt={movie.title || "Movie poster"}
@@ -85,7 +85,7 @@ export default async function MoviePage({
                 {movie.genres?.map((genre: any) => (
                   <span
                     key={genre.id}
-                    className="px-3 py-1 rounded-full text-xs bg-[#1a1a1d] border border-[#2a2a2d] text-gray-200"
+                    className="px-3 py-1 rounded-full text-xs bg-gray-100 dark:bg-night-700 border border-gray-200 dark:border-night-600 text-gray-800 dark:text-gray-200"
                   >
                     {genre.name}
                   </span>
@@ -93,20 +93,22 @@ export default async function MoviePage({
               </div>
 
               {/* Overview */}
-              <p className="text-sm md:text-base text-gray-200 leading-relaxed mb-4">
+              <p className="text-sm md:text-base text-gray-700 dark:text-gray-200 leading-relaxed mb-4">
                 {movie.overview}
               </p>
             </div>
 
             {/* Rating */}
             <div className="mt-4 flex items-center gap-3">
-              <div className="inline-flex items-center gap-2 rounded-full bg-[#14141a] border border-[#2a2a2d] px-4 py-1.5">
-                <span className="text-sm text-gray-300">Rating</span>
-                <span className="text-lg font-bold text-[#F5C518]">
+              <div className="inline-flex items-center gap-2 rounded-full bg-gray-100 dark:bg-night-800 border border-gray-200 dark:border-night-600 px-4 py-1.5">
+                <span className="text-sm text-gray-700 dark:text-gray-300">
+                  Rating
+                </span>
+                <span className="text-lg font-bold text-imdb-500">
                   {movie.vote_average?.toFixed(1)}/10
                 </span>
               </div>
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 {movie.vote_count} votes on TMDB
               </p>
             </div>

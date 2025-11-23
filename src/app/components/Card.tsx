@@ -11,18 +11,7 @@ export default function Card({ result }: CardProps) {
 
   return (
     <Link href={`/movie/${result.id}`}>
-      <article
-        className="
-          group relative cursor-pointer
-          rounded-xl overflow-hidden
-          bg-[#1a1a1d] dark:bg-[#1a1a1d]
-          border border-[#2a2a2d]
-          shadow-lg shadow-black/40
-          hover:shadow-2xl hover:shadow-black/70
-          transform hover:scale-[1.03]
-          transition-all duration-300
-        "
-      >
+      <article className="group relative cursor-pointer rounded-xl overflow-hidden bg-white dark:bg-night-800 border border-gray-200 dark:border-night-600 shadow-lg shadow-black/10 hover:shadow-2xl hover:shadow-black/40 transform hover:scale-[1.03] transition-all duration-300">
         {/* Poster */}
         <div className="relative w-full aspect-[2/3] bg-black">
           {posterPath ? (
@@ -62,14 +51,14 @@ export default function Card({ result }: CardProps) {
           <h2
             className="
               text-sm sm:text-base font-semibold
-              text-gray-100 dark:text-gray-100
+              text-black dark:text-white
               line-clamp-2
             "
           >
             {result.title || result.name}
           </h2>
 
-          <p className="mt-1 text-xs text-gray-400">
+          <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">
             {result.release_date || result.first_air_date || "Unknown date"}
           </p>
         </div>
