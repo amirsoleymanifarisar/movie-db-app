@@ -38,6 +38,15 @@ export default function Card({ result }: CardProps) {
             </div>
           )}
 
+          {/* Rating badge (IMDb accent) */}
+          {typeof result.vote_average !== "undefined" && (
+            <div className="absolute top-2 left-2 z-20">
+              <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-md bg-imdb-500 text-black shadow-sm">
+                {Math.round((result.vote_average || 0) * 10) / 10}
+              </span>
+            </div>
+          )}
+
           {/* Subtle gradient & hover overlay */}
           <div
             className="

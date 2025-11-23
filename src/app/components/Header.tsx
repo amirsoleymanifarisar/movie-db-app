@@ -44,10 +44,10 @@ export default function Header() {
                 px-3 py-1.5 w-40 sm:w-56
                 rounded-full
                 bg-white dark:bg-night-800
-                border border-gray-200 dark:border-night-600
-                text-sm text-gray-700 dark:text-gray-100
+                border border-imdb-500 dark:border-night-600
+                text-sm text-black dark:text-gray-100
                 placeholder-gray-500
-                focus:outline-none focus:ring-2 focus:ring-[#F5C518] focus:border-transparent
+                focus:outline-none focus:ring-2 focus:ring-imdb-500 focus:border-imdb-500
               "
               autoComplete="off"
             />
@@ -55,7 +55,7 @@ export default function Header() {
 
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <span className="text-xl font-extrabold px-3 py-1 rounded-lg shadow-md shadow-black/40">
+            <span className="text-xl font-extrabold bg-imdb-500 text-black px-3 py-1 rounded-lg shadow-md shadow-imdb-600/30">
               IMDb
             </span>
             <span className="text-sm sm:text-base text-gray-600 dark:text-gray-200">
