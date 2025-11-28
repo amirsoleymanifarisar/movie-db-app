@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { addFavorite } from "@/lib/actions/favorite";
 
 interface CardProps {
   result: any; // can be typed better later
@@ -62,6 +63,19 @@ export default function Card({ result }: CardProps) {
             {result.release_date || result.first_air_date || "Unknown date"}
           </p>
         </div>
+        <button
+          onClick={() =>
+            addFavorite({
+              id: result.id.toString(),
+              title: result.title,
+              posterUrl: result.poster_path,
+              overview: result.overview,
+              releaseDate: result.release_date,
+            })
+          }
+        >
+          ❤️
+        </button>
       </article>
     </Link>
   );

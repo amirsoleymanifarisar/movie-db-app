@@ -56,10 +56,10 @@ export default function Header() {
           {/* Logo */}
           <div className="flex items-center gap-2">
             <span className="text-xl font-extrabold bg-imdb-500 text-black px-3 py-1 rounded-lg shadow-md shadow-imdb-600/30">
-              IMDb
+              Film
             </span>
             <span className="text-sm sm:text-base text-gray-600 dark:text-gray-200">
-              Clone
+              Vault
             </span>
           </div>
 

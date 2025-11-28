@@ -1,7 +1,57 @@
-datasource db {
-  provider = "sqlite"
-}
-
 generator client {
   provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Test {
+  id    Int    @id @default(autoincrement())
+  name  String
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  image     String?
+  createdAt DateTime @default(now())
+
+  favorites Favorite[]
+  watchlist Watchlist[]
+}
+
+model Movie {
+  id          String      @id
+  title       String
+  posterUrl   String?
+  overview    String?
+  releaseDate DateTime?
+
+  favorites   Favorite[]
+  watchlist   Watchlist[]
+}
+
+model Favorite {
+  id      String  @id @default(cuid())
+  userId  String
+  movieId String
+
+  user  User  @relation(fields: [userId], references: [id])
+  movie Movie @relation(fields: [movieId], references: [id])
+
+  @@unique([userId, movieId])
+}
+
+model Watchlist {
+  id      String  @id @default(cuid())
+  userId  String  
+  movieId String
+
+  user    User  @relation(fields: [userId], references: [id])
+  movie   Movie @relation(fields: [movieId], references: [id])
+
+  @@unique([userId, movieId])
 }

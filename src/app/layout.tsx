@@ -7,7 +7,7 @@ import Providers from "./Providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "IMDb Clone",
+  title: "FilmVault",
   description: "A movie database app built with Next.js",
 };
 
