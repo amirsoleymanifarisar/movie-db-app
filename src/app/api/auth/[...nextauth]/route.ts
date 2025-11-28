@@ -1,8 +1,9 @@
-import NextAuth from "next-auth";
+import NextAuth, { type NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { db } from "@/lib/prisma";
 
-const handler = NextAuth({
+// 1) EXTRACT CONFIG AND EXPORT IT
+export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -31,6 +32,10 @@ const handler = NextAuth({
       return true;
     },
   },
-});
+};
 
+// 2) PASS CONFIG INTO NextAuth()
+const handler = NextAuth(authOptions);
+
+// 3) EXPORT ROUTE HANDLERS
 export { handler as GET, handler as POST };

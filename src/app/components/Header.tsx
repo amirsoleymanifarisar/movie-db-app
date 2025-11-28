@@ -2,7 +2,12 @@
 
 import HeaderItem from "./HeaderItem";
 import DarkModeSwitch from "./DarkModeSwitch";
-import { HomeIcon, BoltIcon, UserIcon } from "@heroicons/react/24/outline";
+import {
+  HomeIcon,
+  BoltIcon,
+  StarIcon,
+  UserIcon,
+} from "@heroicons/react/24/outline";
 import { useSession, signIn, signOut } from "next-auth/react";
 
 export default function Header() {
@@ -11,6 +16,7 @@ export default function Header() {
   const menuItems = [
     { title: "HOME", Icon: HomeIcon, param: "trending" },
     { title: "TOP RATED", Icon: BoltIcon, param: "topRated" },
+    { title: "FAVORITES", Icon: StarIcon, param: "userFavorites" },
   ];
 
   return (
